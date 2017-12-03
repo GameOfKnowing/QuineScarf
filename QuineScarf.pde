@@ -10,8 +10,8 @@
 
 final int PX_WIDTH = 100; //scarf width
 final int PX_HEIGHT = 1200; //scarf height
-final color ON_COLOR = #000000; // logic 1/low color
-final color OFF_COLOR = #FFFFFF; // logic 0/low color
+final color ON_COLOR = #FFFFFF; // logic 1/low color
+final color OFF_COLOR = #000000; // logic 0/low color
 final boolean BORDER = true; //false = no border; true = adds 1-pixel border to edge of frame
 
 void setup() {
@@ -21,18 +21,19 @@ void setup() {
 }
 
 void draw(){
-  String metaStr = "/*\n*                Quine Scarf Generator\n*                   By Daniel Lytle\n*                   daniellytle.com\n*    Quine image generator. Outputs a binary\n* representation of itself as two-color TIFF file.\n*          Created for a collaboration with\n*             Fabienne Serriere & KnitYak\n*/\n\nfinal int PX_WIDTH = 100; //scarf width\nfinal int PX_HEIGHT = 1200; //scarf height\nfinal color ON_COLOR = #FFFFFF; // logic 1/low color\nfinal color OFF_COLOR = #000000; // logic 0/low color\nfinal boolean BORDER = true; //false = no border; true = adds 1-pixel border to edge of frame\n\nvoid setup() {\n  size( 100, 1200); //set frame width, height\n  //Set entire frame to logic 0 color. If enabled, the border will be this color\n  background(OFF_COLOR);\n}\n\nvoid draw(){\n  String metaStr = \"\";\n  \n  //reduce \"printable\" area by 2 pixels in each dimension if border is on\n  int drawWidth = PX_WIDTH;\n  int drawHeight = PX_HEIGHT;\n  if(BORDER){\n    drawHeight -= 2;\n    drawWidth -= 2;\n  }\n\n  int pxNum = 0; //the current pixel # \n  for(int charNum = 0; charNum < metaStr.length(); charNum ++){\n    char thisChar = metaStr.charAt(charNum); // next 16-bit character\n    char thisCharUpperASCII = hexExpand(true, thisChar); //expands hex representation of thisChar[7:4] to ASCII\n    char thisCharLowerASCII = hexExpand(false, thisChar); //expands hex representation of thisChar[3:0] to ASCII\n\n    //Draws 16-bit thisCharUpperASCII\n    for (int i = 0; i < 16; i++){\n      int x = (pxNum % drawWidth); // x coordinate\n      int y = (pxNum / drawWidth); // y coordinate\n      \n      if(BORDER){ //skip 1st column & row when border is on\n        x++;\n        y++;\n      }\n      \n      char thisBit = char(1 >> i); //mask to exclude all but next pixel bit in thisChar\n    \n      //sets pixel if masked-in bit is a 1\n      if (((thisCharUpperASCII & thisBit) != 0)){\n        set(x, y, ON_COLOR); //sets pixel at x,y to ON_COLOR\n      }\n      \n      pxNum++;\n    }\n    \n    //Draws 16-bit thisCharLowerASCII\n    for (int i = 0; i < 16; i++){      \n      int x = (pxNum % drawWidth); // x coord\n      int y = (pxNum / drawWidth); // y coord\n      \n      if(BORDER){ //skip first column & row when border is on\n        x++;\n        y++;\n      }\n      \n      char thisBit = char(1 >> i); //mask to exclude all but the next pixel bit in thisChar\n      \n      //sets pixel if masked-in bit is a 1\n      if (((thisCharLowerASCII & thisBit) != 0)){\n        set(x, y, ON_COLOR); //sets pixel at x,y to ON_COLOR\n      }\n \n      pxNum++;\n    }\n  }\n \n  save(\"quine_scarf.tif\"); // saves frame as TIFF in sketch directory\n}\n\n//converts the single-character hexadecimal representation of a 4-bit number to a character in ASCII format\nchar hexExpand(boolean isUpper, char inChar){\n  char maskedChar;\n  //puts bits inChar[7:4] or inChar[3:0] into maskedChar[3:0] & masks out maskedChar[15:4]\n  if (isUpper){ \n    maskedChar = char((inChar >> 4) & 0x000F);\n  }\n  else{\n    maskedChar = char(inChar & 0x000F);\n  }\n  \n  //returns ASCII character for hex representation of maskedChar[3:0]\n  if (maskedChar == 0){\n    return '0';\n  }\n  if (maskedChar == 1){\n    return '1';\n  }\n  if (maskedChar == 2){\n    return '2';\n  }\n  if (maskedChar == 3){\n    return '3';\n  }\n  if (maskedChar == 4){\n    return '4';\n  }\n  if (maskedChar == 5){\n    return '5';\n  }\n  if (maskedChar == 6){\n    return '6';\n  }\n  if (maskedChar == 7){\n    return '7';\n  }\n  if (maskedChar == 8){\n    return '8';\n  }\n  if (maskedChar == 9){\n    return '9';\n  }\n  if (maskedChar == 10){\n    return 'A';\n  }\n  if (maskedChar == 11){\n    return 'B';\n  }\n  if (maskedChar == 12){\n    return 'C';\n  }\n  if (maskedChar == 13){\n    return 'D';\n  }\n  if (maskedChar == 14){\n    return 'E';\n  }\n  else{\n    return 'F';\n  }\n}";
+  String metaStr = "/*\n*               Quine Scarf Generator\n*                  By Daniel Lytle\n*                  daniellytle.com\n*/\n\nfinal int PX_WIDTH = 100; //scarf width\nfinal int PX_HEIGHT = 1200; //scarf height\nfinal color ON_COLOR = #FFFFFF; // logic 1/low color\nfinal color OFF_COLOR = #000000; // logic 0/low color\nfinal boolean BORDER = true; //false = no border; true = adds 1-pixel border to edge of frame\n\nvoid setup() {\n  size( 100, 1200); //set frame width, height\n  //Set entire frame to logic 0 color. If enabled, the border will be this color\n  background(OFF_COLOR);\n}\n\nvoid draw(){\n  String metaStr = \"\";\n  \n  //reduce \"printable\" area by 2 pixels in each dimension if border is on\n  int drawWidth = PX_WIDTH;\n  int drawHeight = PX_HEIGHT;\n  if(BORDER){\n    print(\"inBorder\");\n    drawHeight = drawHeight - 100;\n    drawWidth = drawWidth - 2;\n  }\n\n  int pxNum = 0; //the current pixel # \n  for(int charNum = 0; (charNum < metaStr.length()) && ((pxNum / drawWidth) < drawHeight); charNum ++){\n    char thisChar = metaStr.charAt(charNum); // next 16-bit character\n    char thisCharUpperASCII = hexExpand(true, thisChar); //expands hex representation of thisChar[7:4] to ASCII\n    char thisCharLowerASCII = hexExpand(false, thisChar); //expands hex representation of thisChar[3:0] to ASCII\n\n    //Draws 16-bit thisCharUpperASCII\n    for (int i = 0; i < 16; i++){\n      int x = (pxNum % drawWidth); // x coordinate\n      int y = (pxNum / drawWidth); // y coordinate\n      \n      if(BORDER){ //skip 1st column & row when border is on\n        x++;\n        y++;\n      }\n      \n      char thisBit = char(1 >> i); //mask to exclude all but next pixel bit in thisChar\n    \n      //sets pixel if masked-in bit is a 1\n      if (((thisCharUpperASCII & thisBit) != 0)){\n        set(x, y, ON_COLOR); //sets pixel at x,y to ON_COLOR\n      }\n      \n      pxNum++  ;\n    }\n    \n    //Draws 16-bit thisCharLowerASCII\n    for (int i = 0; i < 16; i++){      \n      int x = (pxNum % drawWidth); // x coord\n      int y = (pxNum / drawWidth); // y coord\n      \n      if(BORDER){ //skip first column & row when border is on\n        x++;\n        y++;\n      }\n      \n      char thisBit = char(1 >> i); //mask to exclude all but the next pixel bit in thisChar\n      \n      //sets pixel if masked-in bit is a 1\n      if (((thisCharLowerASCII & thisBit) != 0)){\n        set(x, y, ON_COLOR); //sets pixel at x,y to ON_COLOR\n      }\n \n      pxNum++;\n    }\n  }\n \n  save(\"quine_scarf.tif\"); // saves frame as TIFF in sketch directory\n  noLoop();\n}\n\n//converts the single-character hexadecimal representation of a 4-bit number to a character in ASCII format\nchar hexExpand(boolean isUpper, char inChar){\n  char maskedChar;\n  //puts bits inChar[7:4] or inChar[3:0] into maskedChar[3:0] & masks out maskedChar[15:4]\n  if (isUpper){ \n    maskedChar = char((inChar >> 4) & 0x000F);\n  }\n  else{\n    maskedChar = char(inChar & 0x000F);\n  }\n  \n  //returns ASCII character for hex representation of maskedChar[3:0]\n  if (maskedChar == 0){\n    return '0';\n  }\n  if (maskedChar == 1){\n    return '1';\n  }\n  if (maskedChar == 2){\n    return '2';\n  }\n  if (maskedChar == 3){\n    return '3';\n  }\n  if (maskedChar == 4){\n    return '4';\n  }\n  if (maskedChar == 5){\n    return '5';\n  }\n  if (maskedChar == 6){\n    return '6';\n  }\n  if (maskedChar == 7){\n    return '7';\n  }\n  if (maskedChar == 8){\n    return '8';\n  }\n  if (maskedChar == 9){\n    return '9';\n  }\n  if (maskedChar == 10){\n    return 'A';\n  }\n  if (maskedChar == 11){\n    return 'B';\n  }\n  if (maskedChar == 12){\n    return 'C';\n  }\n  if (maskedChar == 13){\n    return 'D';\n  }\n  if (maskedChar == 14){\n    return 'E';\n  }\n  else{\n    return 'F';\n  }\n}";
   
   //reduce "printable" area by 2 pixels in each dimension if border is on
   int drawWidth = PX_WIDTH;
   int drawHeight = PX_HEIGHT;
   if(BORDER){
-    drawHeight -= 2;
-    drawWidth -= 2;
+    print("inBorder");
+    drawHeight = drawHeight - 2;
+    drawWidth = drawWidth - 2;
   }
 
   int pxNum = 0; //the current pixel # 
-  for(int charNum = 0; charNum < metaStr.length(); charNum ++){
+  for(int charNum = 0; (charNum < metaStr.length()) && ((pxNum / drawWidth) < drawHeight); charNum ++){
     char thisChar = metaStr.charAt(charNum); // next 16-bit character
     char thisCharUpperASCII = hexExpand(true, thisChar); //expands hex representation of thisChar[7:4] to ASCII
     char thisCharLowerASCII = hexExpand(false, thisChar); //expands hex representation of thisChar[3:0] to ASCII
@@ -54,7 +55,7 @@ void draw(){
         set(x, y, ON_COLOR); //sets pixel at x,y to ON_COLOR
       }
       
-      pxNum++;
+      pxNum++  ;
     }
     
     //Draws 16-bit thisCharLowerASCII
@@ -79,6 +80,7 @@ void draw(){
   }
  
   save("quine_scarf.tif"); // saves frame as TIFF in sketch directory
+  noLoop();
 }
 
 //converts the single-character hexadecimal representation of a 4-bit number to a character in ASCII format
